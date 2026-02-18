@@ -2,6 +2,7 @@
 
 A cute interactive website made to confess feelings in the sweetest way possible 💕
 Built with love, pink vibes, and a little bit of chaos 😆✨
+Easy to build even if this is your first time, my purpose is to show you guys how easy to do your own html
 
 ---
 
