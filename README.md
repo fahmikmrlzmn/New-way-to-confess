@@ -28,13 +28,8 @@ No frameworks. Just pure love and creativity 💖
 
 ## 🚀 Live Demo
 
-👉 *(Put your Vercel link here)*
+👉 https://new-way-to-confess.vercel.app
 
-Example:
-
-```
-https://your-project.vercel.app
-```
 
 ---
 
