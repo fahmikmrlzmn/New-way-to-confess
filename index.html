@@ -162,10 +162,21 @@ canvas{
 
 <body>
 
-<!-- MUSIC -->
-<audio autoplay loop>
-<source src="https://www.bensound.com/bensound-music/bensound-love.mp3">
+<!-- MUSIC (hidden) -->
+<audio id="bgMusic" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
 </audio>
+
+<script>
+// play music when user clicks anywhere on page
+let musicStarted = false;
+document.addEventListener('click', () => {
+    if(!musicStarted){
+        document.getElementById('bgMusic').play();
+        musicStarted = true;
+    }
+});
+</script>
 
 <!-- PAGE 1 -->
 <div class="container" id="page1">
