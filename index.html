@@ -12,7 +12,7 @@ body{
     overflow:hidden;
 }
 
-/* center */
+/* center content */
 .container{
     height:100vh;
     display:flex;
@@ -21,6 +21,20 @@ body{
     flex-direction:column;
     text-align:center;
     position:relative;
+}
+
+/* page 1 decorations */
+.cloud{
+    position:absolute;
+    top:0;
+    width:100px;
+    opacity:0.3;
+    animation:moveClouds linear infinite;
+}
+
+@keyframes moveClouds{
+    0% {left:-120px;}
+    100% {left:100%;}
 }
 
 h1{
@@ -119,6 +133,18 @@ img{
     to{transform:translateY(-10vh);}
 }
 
+/* floating sparkles */
+.sparkle{
+    position:absolute;
+    color:#ffb6c1;
+    font-size:12px;
+    animation:twinkle 1.5s infinite alternate;
+}
+@keyframes twinkle{
+    0% {opacity:0.2; transform:scale(0.5);}
+    100% {opacity:1; transform:scale(1.2);}
+}
+
 /* countdown */
 #count{
     font-size:20px;
@@ -141,21 +167,12 @@ canvas{
 <source src="https://www.bensound.com/bensound-music/bensound-love.mp3">
 </audio>
 
-<!-- FLOATING HEARTS SCRIPT -->
-<script>
-setInterval(()=>{
-let heart=document.createElement("div");
-heart.className="heart";
-heart.innerHTML="💖";
-heart.style.left=Math.random()*100+"vw";
-heart.style.fontSize=(Math.random()*20+20)+"px";
-document.body.appendChild(heart);
-setTimeout(()=>heart.remove(),6000);
-},300);
-</script>
-
 <!-- PAGE 1 -->
 <div class="container" id="page1">
+
+<!-- clouds -->
+<img class="cloud" src="https://i.ibb.co/vsY0LjF/cloud1.png" style="top:20px; width:120px; animation-duration:60s;">
+<img class="cloud" src="https://i.ibb.co/vsY0LjF/cloud1.png" style="top:80px; width:150px; animation-duration:90s;">
 
 <h1>Hi Halisya Sofia 💗</h1>
 
@@ -166,11 +183,13 @@ setTimeout(()=>heart.remove(),6000);
 <button class="yes" onclick="yesClick()">Yes 💖</button>
 <button class="no" id="noBtn">No 🙈</button>
 </div>
-
 </div>
 
 <!-- PAGE 2 -->
 <div class="container page2" id="page2">
+
+<!-- confetti canvas -->
+<canvas id="confetti"></canvas>
 
 <div class="heart-frame">
 <img src="example.jpeg">
@@ -181,6 +200,7 @@ setTimeout(()=>heart.remove(),6000);
 
 </div>
 
+<!-- SCRIPTS -->
 <script>
 /* typing text */
 let text="Will you eat with me today?";
@@ -213,12 +233,24 @@ noBtn.style.left=x+"px";
 noBtn.style.top=y+"px";
 });
 
-/* yes click */
+/* YES CLICK */
 function yesClick(){
 document.getElementById("page1").style.display="none";
 document.getElementById("page2").style.display="flex";
 startFireworks();
+startConfetti();
 }
+
+/* floating hearts */
+setInterval(()=>{
+let heart=document.createElement("div");
+heart.className="heart";
+heart.innerHTML="💖";
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(Math.random()*20+20)+"px";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),6000);
+},300);
 
 /* fireworks */
 function startFireworks(){
@@ -226,40 +258,9 @@ let canvas=document.getElementById("fireworks");
 let ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
-
 let particles=[];
-
 function createFirework(){
 let x=Math.random()*canvas.width;
 let y=Math.random()*canvas.height/2;
 for(let i=0;i<80;i++){
-particles.push({
-x:x,
-y:y,
-dx:(Math.random()-0.5)*5,
-dy:(Math.random()-0.5)*5,
-life:100
-});
-}}
-setInterval(createFirework,700);
-
-function animate(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-particles.forEach((p,index)=>{
-p.x+=p.dx;
-p.y+=p.dy;
-p.life--;
-ctx.fillStyle="hsl("+Math.random()*360+",100%,70%)";
-ctx.beginPath();
-ctx.arc(p.x,p.y,3,0,Math.PI*2);
-ctx.fill();
-if(p.life<=0)particles.splice(index,1);
-});
-requestAnimationFrame(animate);
-}
-animate();
-}
-</script>
-
-</body>
-</html>
+particles.push({x:x,y:y,dx:(Math.random()-0.5)*5*
