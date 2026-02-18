@@ -10,9 +10,17 @@ body{
     font-family:'Comic Sans MS', cursive;
     background: linear-gradient(135deg,#ffd6eb,#ffe9f5);
     overflow:hidden;
+    animation:backgroundShift 20s infinite alternate;
 }
 
-/* center content */
+/* background gradient animation */
+@keyframes backgroundShift{
+    0%{background: linear-gradient(135deg,#ffd6eb,#ffe9f5);}
+    50%{background: linear-gradient(135deg,#ffb6c1,#ffe0f0);}
+    100%{background: linear-gradient(135deg,#ffd6eb,#ffe9f5);}
+}
+
+/* container */
 .container{
     height:100vh;
     display:flex;
@@ -23,7 +31,7 @@ body{
     position:relative;
 }
 
-/* page 1 decorations */
+/* clouds for page 1 */
 .cloud{
     position:absolute;
     top:0;
@@ -31,7 +39,6 @@ body{
     opacity:0.3;
     animation:moveClouds linear infinite;
 }
-
 @keyframes moveClouds{
     0% {left:-120px;}
     100% {left:100%;}
@@ -56,15 +63,18 @@ button{
     border-radius:30px;
     font-size:20px;
     cursor:pointer;
+    transition:0.3s;
 }
 
+button:hover{
+    transform:scale(1.1);
+}
+
+/* yes and no buttons */
 .yes{
     background:#ff69b4;
     color:white;
     box-shadow:0 0 15px #ff9bd1;
-}
-.yes:hover{
-    transform:scale(1.1);
 }
 
 .no{
@@ -90,7 +100,7 @@ img{
     box-shadow:0 0 20px pink;
 }
 
-/* heart frame */
+/* heart frame around image */
 .heart-frame{
     padding:20px;
     border-radius:30px;
@@ -151,6 +161,7 @@ img{
     color:#ff4fa3;
 }
 
+/* fireworks/confetti canvas */
 canvas{
     position:absolute;
     top:0;
@@ -161,22 +172,6 @@ canvas{
 </head>
 
 <body>
-
-<!-- MUSIC (hidden) -->
-<audio id="bgMusic" loop>
-  <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-// play music when user clicks anywhere on page
-let musicStarted = false;
-document.addEventListener('click', () => {
-    if(!musicStarted){
-        document.getElementById('bgMusic').play();
-        musicStarted = true;
-    }
-});
-</script>
 
 <!-- PAGE 1 -->
 <div class="container" id="page1">
@@ -194,14 +189,13 @@ document.addEventListener('click', () => {
 <button class="yes" onclick="yesClick()">Yes 💖</button>
 <button class="no" id="noBtn">No 🙈</button>
 </div>
+
 </div>
 
 <!-- PAGE 2 -->
 <div class="container page2" id="page2">
 
-<!-- confetti canvas -->
 <canvas id="confetti"></canvas>
-
 <div class="heart-frame">
 <img src="example.jpeg">
 </div>
@@ -211,9 +205,8 @@ document.addEventListener('click', () => {
 
 </div>
 
-<!-- SCRIPTS -->
 <script>
-/* typing text */
+/* typing effect */
 let text="Will you eat with me today?";
 let i=0;
 function typing(){
@@ -244,7 +237,7 @@ noBtn.style.left=x+"px";
 noBtn.style.top=y+"px";
 });
 
-/* YES CLICK */
+/* yes click */
 function yesClick(){
 document.getElementById("page1").style.display="none";
 document.getElementById("page2").style.display="flex";
@@ -274,4 +267,58 @@ function createFirework(){
 let x=Math.random()*canvas.width;
 let y=Math.random()*canvas.height/2;
 for(let i=0;i<80;i++){
-particles.push({x:x,y:y,dx:(Math.random()-0.5)*5*
+particles.push({x:x,y:y,dx:(Math.random()-0.5)*5,dy:(Math.random()-0.5)*5,life:100});
+}}
+setInterval(createFirework,700);
+function animate(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+particles.forEach((p,index)=>{
+p.x+=p.dx;
+p.y+=p.dy;
+p.life--;
+ctx.fillStyle="hsl("+Math.random()*360+",100%,70%)";
+ctx.beginPath();
+ctx.arc(p.x,p.y,3,0,Math.PI*2);
+ctx.fill();
+if(p.life<=0)particles.splice(index,1);
+});
+requestAnimationFrame(animate);
+}
+animate();
+}
+
+/* confetti */
+function startConfetti(){
+let canvas=document.getElementById("confetti");
+let ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+let confettis=[];
+function createConfetti(){
+for(let i=0;i<50;i++){
+confettis.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+dx:(Math.random()-0.5)*4,
+dy:(Math.random()*3+2),
+color:`hsl(${Math.random()*360},80%,70%)`,
+size:Math.random()*6+4
+});
+}}
+setInterval(createConfetti,500);
+function animateConfetti(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+confettis.forEach((c,index)=>{
+c.x+=c.dx;
+c.y+=c.dy;
+ctx.fillStyle=c.color;
+ctx.fillRect(c.x,c.y,c.size,c.size);
+if(c.y>canvas.height) confettis.splice(index,1);
+});
+requestAnimationFrame(animateConfetti);
+}
+animateConfetti();
+}
+</script>
+</body>
+</html>
