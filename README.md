@@ -100,7 +100,7 @@ Things you can add later:
 
 ## 👨‍💻 Author
 
-Made with 💗 by **Your Name**
+Made with 💗 by Fahmi Kamarulzaman
 
 ---
 
@@ -111,4 +111,3 @@ you’re special enough to get a whole website 🥰
 
 ---
 
-⭐ *If this made you smile, give it a star!*
