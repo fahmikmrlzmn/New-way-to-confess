@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>For You 💕</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Comic Sans MS', cursive;
+    background: linear-gradient(135deg,#ffd6eb,#ffe9f5);
+    overflow:hidden;
+}
+
+/* center */
+.container{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center;
+    position:relative;
+}
+
+h1{
+    font-size:60px;
+    color:#ff4fa3;
+    margin-bottom:10px;
+}
+
+.question{
+    font-size:28px;
+    color:#ff77b7;
+    margin-bottom:20px;
+}
+
+button{
+    padding:15px 35px;
+    margin:10px;
+    border:none;
+    border-radius:30px;
+    font-size:20px;
+    cursor:pointer;
+}
+
+.yes{
+    background:#ff69b4;
+    color:white;
+    box-shadow:0 0 15px #ff9bd1;
+}
+.yes:hover{
+    transform:scale(1.1);
+}
+
+.no{
+    background:#ffd1e8;
+    color:#ff4fa3;
+    position:absolute;
+}
+
+/* page2 */
+.page2{
+    display:none;
+    animation:fade 1s ease;
+}
+
+@keyframes fade{
+    from{opacity:0; transform:scale(.8);}
+    to{opacity:1; transform:scale(1);}
+}
+
+img{
+    width:300px;
+    border-radius:20px;
+    box-shadow:0 0 20px pink;
+}
+
+/* heart frame */
+.heart-frame{
+    padding:20px;
+    border-radius:30px;
+    position:relative;
+    display:inline-block;
+    background:white;
+    margin-bottom:20px;
+}
+
+.heart-frame::before{
+    content:"💖 💕 💗 💓 💞 💘 💝 💖";
+    position:absolute;
+    top:-25px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:25px;
+}
+
+.heart-frame::after{
+    content:"💗 💓 💞 💘 💝 💖 💕 💗";
+    position:absolute;
+    bottom:-25px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:25px;
+}
+
+.message{
+    font-size:35px;
+    color:#ff4fa3;
+}
+
+/* floating hearts */
+.heart{
+    position:absolute;
+    animation:float 6s linear infinite;
+}
+@keyframes float{
+    from{transform:translateY(100vh);}
+    to{transform:translateY(-10vh);}
+}
+
+/* countdown */
+#count{
+    font-size:20px;
+    color:#ff4fa3;
+}
+
+canvas{
+    position:absolute;
+    top:0;
+    left:0;
+    pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- MUSIC -->
+<audio autoplay loop>
+<source src="https://www.bensound.com/bensound-music/bensound-love.mp3">
+</audio>
+
+<!-- FLOATING HEARTS SCRIPT -->
+<script>
+setInterval(()=>{
+let heart=document.createElement("div");
+heart.className="heart";
+heart.innerHTML="💖";
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(Math.random()*20+20)+"px";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),6000);
+},300);
+</script>
+
+<!-- PAGE 1 -->
+<div class="container" id="page1">
+
+<h1>Hi Halisya Sofia 💗</h1>
+
+<div class="question" id="typing"></div>
+<div id="count"></div>
+
+<div>
+<button class="yes" onclick="yesClick()">Yes 💖</button>
+<button class="no" id="noBtn">No 🙈</button>
+</div>
+
+</div>
+
+<!-- PAGE 2 -->
+<div class="container page2" id="page2">
+
+<div class="heart-frame">
+<img src="example.jpeg">
+</div>
+
+<div class="message">YEAAYYYY!! I’m so happy!!! 🥰💕</div>
+<canvas id="fireworks"></canvas>
+
+</div>
+
+<script>
+/* typing text */
+let text="Will you eat with me today?";
+let i=0;
+function typing(){
+if(i<text.length){
+document.getElementById("typing").innerHTML+=text.charAt(i);
+i++;
+setTimeout(typing,70);
+}}
+typing();
+
+/* countdown */
+let time=10;
+let timer=setInterval(()=>{
+document.getElementById("count").innerHTML="Answer before time runs out: "+time;
+time--;
+if(time<0){
+clearInterval(timer);
+document.getElementById("count").innerHTML="Time's up 😭";
+}
+},1000);
+
+/* moving NO button */
+const noBtn=document.getElementById("noBtn");
+noBtn.addEventListener("mouseover",()=>{
+let x=Math.random()*(window.innerWidth-100);
+let y=Math.random()*(window.innerHeight-50);
+noBtn.style.left=x+"px";
+noBtn.style.top=y+"px";
+});
+
+/* yes click */
+function yesClick(){
+document.getElementById("page1").style.display="none";
+document.getElementById("page2").style.display="flex";
+startFireworks();
+}
+
+/* fireworks */
+function startFireworks(){
+let canvas=document.getElementById("fireworks");
+let ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+
+function createFirework(){
+let x=Math.random()*canvas.width;
+let y=Math.random()*canvas.height/2;
+for(let i=0;i<80;i++){
+particles.push({
+x:x,
+y:y,
+dx:(Math.random()-0.5)*5,
+dy:(Math.random()-0.5)*5,
+life:100
+});
+}}
+setInterval(createFirework,700);
+
+function animate(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+particles.forEach((p,index)=>{
+p.x+=p.dx;
+p.y+=p.dy;
+p.life--;
+ctx.fillStyle="hsl("+Math.random()*360+",100%,70%)";
+ctx.beginPath();
+ctx.arc(p.x,p.y,3,0,Math.PI*2);
+ctx.fill();
+if(p.life<=0)particles.splice(index,1);
+});
+requestAnimationFrame(animate);
+}
+animate();
+}
+</script>
+
+</body>
+</html>
